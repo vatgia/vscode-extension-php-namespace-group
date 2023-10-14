@@ -58,11 +58,14 @@ function insertNamespace(editor: vscode.TextEditor, namespace: string) {
 		}
 
 		if (insertAt != null) {
-			textEdit.replace(new vscode.Position(insertAt, 0), prependText + namespace + '\n');
+			textEdit.replace(new vscode.Position(insertAt, 0), prependText + namespace);
 		}
-		var textRange = new vscode.Range(new vscode.Position(start, 0), new vscode.Position(end, 10000));
 
-		textEdit.delete(textRange);
+		if (start > 1) {
+			var textRange = new vscode.Range(new vscode.Position(start, 0), new vscode.Position(end, 10000));
+			textEdit.delete(textRange);
+		}
+
 
 	});
 }
@@ -84,6 +87,9 @@ function resolveNamespaceGroup() {
 		} else {
 			selectedNamespaces = document.getText(selection);
 		}
+
+		selectedNamespaces = selectedNamespaces.replace('<?php', '');
+		selectedNamespaces = selectedNamespaces.replace('<?', '');
 
 		let namespaces = selectedNamespaces.split(';');
 
@@ -137,8 +143,6 @@ function resolveNamespaceGroup() {
 
 				useNamepaces.push(prefix + lineUse);
 			});
-
-
 		});
 
 		useNamepaces.forEach((useNamespace, index) => {
@@ -193,6 +197,11 @@ function resolveNamespaceGroup() {
 		let groupClassGroupedSingle: any[] = [];
 		groupClasses.forEach((namespace, index) => {
 			delete (groupClasses[index]);
+
+			if (namespace.startsWith('\\')) {
+				namespace = namespace.substr(1);
+			}
+
 			let nameSpaceArr = namespace.split('\\');
 			if (nameSpaceArr.length <= 1) {
 				groupClassGroupedSingle.push(namespace);
