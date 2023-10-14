@@ -22,7 +22,16 @@
     "commands": [
       {
         "command": "php-namespace-group.resolveGroup",
-        "title": "Auto group PHP namespaces"
+        "title": "Auto group PHP namespaces",
+        "category": "Format"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "php-namespace-group.resolveGroup",
+        "key": "alt+shift+q",
+        "mac": "cmd+shift+q",
+        "when": "editorTextFocus"
       }
     ]
   },
